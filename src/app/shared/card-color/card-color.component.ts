@@ -3,26 +3,25 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { NgClass } from '@angular/common';
 import { RouterLinkWithHref } from '@angular/router';
-import { ColorClass, ColorClassOptions } from '@models/color.model';
+import { COLORS, Colors } from '@models/color.model';
+import { Board } from '@models/board.model';
 
 @Component({
-  selector: 'app-board-card',
+  selector: 'app-card-color',
   standalone: true,
   imports: [
     FontAwesomeModule,
     RouterLinkWithHref,
     NgClass
   ],
-  templateUrl: './board-card.component.html',
+  templateUrl: './card-color.component.html',
 })
-export class BoardCardComponent {
-  @Input({required: true}) label: string = '';
-  @Input() bgColor: ColorClassOptions = 'default';
-  @Input() isStarred = false;
-  @Input() img?: string;
+export class CardColorComponent {
+  @Input({required: true}) board: Board = {} as Board;
+  
   faStar = faStar;
 
   get bgColorClass() {
-    return ColorClass[this.bgColor];
+    return COLORS[this.board.backgroundColor];
   }
 }

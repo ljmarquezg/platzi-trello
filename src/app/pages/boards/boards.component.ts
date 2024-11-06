@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild, WritableSignal } from "@angular/core";
+import { Component, inject, OnInit, signal, ViewChild, WritableSignal } from "@angular/core";
 import { CdkAccordionItem, CdkAccordionModule } from "@angular/cdk/accordion";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import {
@@ -6,8 +6,6 @@ import {
   faAngleUp,
   faBorderAll,
   faBorderTopLeft,
-  faChevronDown,
-  faChevronUp,
   faClock,
   faGear,
   faHeart,
@@ -19,11 +17,14 @@ import {
   faUsers,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
+import { RouterLinkWithHref } from "@angular/router";
 import { faTrello } from "@fortawesome/free-brands-svg-icons";
 import { BtnComponent } from "@shared/btn/btn.component";
 import { NavbarComponent } from "@shared/navbar/navbar.component";
 import { AccordionItem } from "@models/accordeon.model";
-import { BoardCardComponent } from "../board/components/board-card/board-card.component";
+import { MeService } from "@services/me.service";
+import { Board } from "@models/board.model";
+import { CardColorComponent } from "@shared/card-color/card-color.component";
 
 export interface ExpandStatus {
   visible: string;
@@ -35,17 +36,20 @@ export interface ExpandStatus {
   imports: [
     FontAwesomeModule,
     CdkAccordionModule,
+    RouterLinkWithHref,
     CdkAccordionItem,
     BtnComponent,
     NavbarComponent,
-    BoardCardComponent,
+    CardColorComponent,
     BtnComponent,
   ],
   templateUrl: "./boards.component.html",
 })
-export class BoardsComponent {
+export class BoardsComponent implements OnInit {
   @ViewChild(CdkAccordionItem) accordionItem!: CdkAccordionItem;
 
+  private meService: MeService = inject(MeService);
+  boards: WritableSignal<Board[]> = signal([]);
   faGear = faGear;
   faTrello = faTrello;
   faTableColumn = faTableColumns;
@@ -124,7 +128,22 @@ export class BoardsComponent {
     );
   }
 
+  ngOnInit() {
+    this.getMeBoards();
+  }
+
   ngOnChanges() {
     console.log(this.accordionItem);
+  }
+
+  getMeBoards(): void {
+    this.meService.getMeBoards().subscribe({
+      next: (boards: Board[]) => {
+          this.boards.set(boards);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 }

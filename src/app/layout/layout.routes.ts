@@ -10,7 +10,6 @@ export const LAYOUT_ROUTES: Routes = [
         {
           path: '',
           redirectTo: 'boards',
-          canActivate: [authGuard],
           pathMatch: 'full'
         },
         {

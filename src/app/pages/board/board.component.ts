@@ -1,4 +1,4 @@
-import { Component, inject, signal, WritableSignal } from "@angular/core";
+import { Component, inject, OnInit, signal, WritableSignal } from "@angular/core";
 import {
   CdkDrag,
   CdkDragDrop,
@@ -26,6 +26,12 @@ import ToDo, { Column } from "@models/todo.model";
 import { BtnComponent, } from "@shared/btn/btn.component";
 import { ColumnComponent } from "./components/column/column.component";
 import { TodoDialogComponent } from "../board/components/todo-dialog/todo-dialog.component";
+import { BoardsService } from "@services/boards.service";
+import { Router } from "express";
+import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
+import { Board } from "@models/board.model";
+import { Card } from "@models/card.model";
+import { List } from "@models/list.model";
 
 @Component({
   selector: "app-board",
@@ -87,8 +93,10 @@ import { TodoDialogComponent } from "../board/components/todo-dialog/todo-dialog
     `,
   ],
 })
-export class BoardComponent {
+export class BoardComponent implements OnInit {
   private dialog: Dialog = inject(Dialog);
+  private boardsService: BoardsService = inject(BoardsService);
+  private route: ActivatedRoute = inject(ActivatedRoute);
 
   faPlus = faPlus;
   faTimes = faTimes;
@@ -98,61 +106,23 @@ export class BoardComponent {
   isAddingList: WritableSignal<boolean> = signal(false);
   todoTitle: FormControl = new FormControl("", [Validators.required]);
   newListTitle: FormControl = new FormControl("", [Validators.required]);
-  columns: WritableSignal<Column[]> = signal([
-    {
-      title: "To do",
-      todos: [
-        {
-          id: "1",
-          title: "Drag and drop",
-          completed: false,
-        },
-        {
-          id: "2",
-          title: "Take over world",
-          completed: false,
-        },
-        {
-          id: "3",
-          title: "One more thing",
-          completed: false,
-        },
-      ],
-      addNew: false,
-      optionsOpen: false,
-    },
-    {
-      title: "Doing",
-      todos: [
-        {
-          id: "4",
-          title: "Testing",
-          completed: false,
-        },
-        {
-          id: "5",
-          title: "Play video games",
-          completed: false,
-        },
-      ],
-      addNew: false,
-      optionsOpen: false,
-    },
-    {
-      title: "Done",
-      todos: [
-        {
-          id: "6",
-          title: "Finish Angular Screencast",
-          completed: false,
-        },
-      ],
-      addNew: false,
-      optionsOpen: false,
-    },
-  ]);
+  board: WritableSignal<Board | null> = signal(null);
 
-  drop(event: CdkDragDrop<any[]>): void {
+  private getBoard(boardId: string): void {
+    this.boardsService.getBoard(boardId).subscribe((board) => {
+      this.board.set(board);
+    });
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params): void => {
+      const boardId = params.get("boardId");
+      if(boardId) {
+        this.getBoard(boardId)
+      }
+    });
+  }
+  drop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -170,7 +140,7 @@ export class BoardComponent {
   }
 
   openOptions(index: number): void {
-    this.columns.update((columns: Column[]) => {
+    /* this.columns.update((columns: Column[]) => {
       return columns.map((column, current) => {
         if (current === index) {
           return {
@@ -180,11 +150,11 @@ export class BoardComponent {
         }
         return column;
       });
-    });
+    }); */
   }
 
   toggleNewCardForm(index: number): void {
-    this.columns.update((columns: Column[]) => {
+    /* this.columns.update((columns: Column[]) => {
       return columns.map((column, current) => {
         if (current === index) {
           return {
@@ -194,11 +164,11 @@ export class BoardComponent {
         }
         return column;
       });
-    });
+    }); */
   }
 
   createCard(index: number): void {
-    if(this.todoTitle.valid) {
+   /*  if(this.todoTitle.valid) {
       this.columns.update((columns: Column[]) => {
         return columns.map((column:Column, current: number) => {
           if(current === index) {
@@ -220,7 +190,7 @@ export class BoardComponent {
           return column;
         });
       })
-    }
+    } */
   }
 
   toggleNewListForm(): void {
@@ -236,18 +206,19 @@ export class BoardComponent {
         optionsOpen: false,
       };
 
-      this.columns.update((prev) => [...prev, newTodo]);
+      //this.columns.update((prev) => [...prev, newTodo]);
     }
   }
 
-  openDialog(todo: ToDo): void {
-    console.log(todo);
+  openDialog(card: Card, listTitle: string): void {
+    console.log(card);
     const dialogRef = this.dialog.open(TodoDialogComponent, {
       minWidth: "300px",
       maxWidth: "50%",
       autoFocus: false,
       data: {
-        todo,
+        card,
+        listTitle,
       },
     });
 

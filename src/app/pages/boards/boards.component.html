@@ -69,19 +69,19 @@
         <div class="boards">
             <h2 class="font-semibold mb-2"><fa-icon [icon]="faStar" class="pr-1"></fa-icon>Starred Boards</h2>
             <div class="grid grid-cols-4 gap-4">
-                <app-board-card label="Board 1" bgColor="primary" [isStarred]="true"/>
-                <app-board-card label="Board 2" bgColor="success" [isStarred]="true"/>
+              <!--   <app-card-color label="Board 1" bgColor="primary" [isStarred]="true"/>
+                <app-card-color label="Board 2" bgColor="success" [isStarred]="true"/> -->
             </div>
         </div>
         <!--Recently Viewed-->
         <div class="recenty-viewed">
             <h2 class="font-semibold mb-2"><fa-icon [icon]="faClock" class="pr-1"></fa-icon>Recently Viewed</h2>
             <div class="grid grid-cols-4 gap-2">
-                <app-board-card label="Board 1" bgColor="primary" [isStarred]="true"/>
-                <app-board-card label="Board 2" bgColor="success" [isStarred]="true"/>
-                <app-board-card label="Board 3" bgColor="default"/>
-                <app-board-card label="Board 4" bgColor="danger"/>
-                <app-board-card label="Create New"/>
+               <!--  <app-card-color label="Board 1" bgColor="primary" [isStarred]="true"/>
+                <app-card-color label="Board 2" bgColor="success" [isStarred]="true"/>
+                <app-card-color label="Board 3" bgColor="default"/>
+                <app-card-color label="Board 4" bgColor="danger"/>
+                <app-card-color label="Create New"/> -->
             </div>
         </div>
         <!--Your Workspaces-->
@@ -111,10 +111,11 @@
                 </div>
             </div>
             <div class="grid grid-cols-4 gap-2">
-                <app-board-card label="Board 1" bgColor="primary"/>
-                <app-board-card label="Board 2" bgColor="success"/>
-                <app-board-card label="Board 3" bgColor="gray"/>
-                <app-board-card label="Board 4" bgColor="danger"/>
+                @for(board of boards(); track board.id) {
+                    <a [routerLink]="['/app/boards', board.id]">
+                        <app-card-color [board]="board" />
+                    </a>
+                }
             </div>
         </div>
     </div>

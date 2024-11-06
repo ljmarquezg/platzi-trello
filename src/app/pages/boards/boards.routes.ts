@@ -10,7 +10,7 @@ export const BOARDS_ROUTES: Routes = [
     component: BoardsComponent,
   },
   {
-    path: ":id",
+    path: ":boardId",
     canActivate: [authGuard],
     component: BoardComponent,
   },

@@ -24,7 +24,6 @@ export class UsersComponent {
   user: Signal<User | null> = signal(null);
 
   ngOnInit() {
-    console.log('chapapote');
     this.usersService.getUsers().subscribe((users: User[]) => {
       this.dataSource.init(users);
     });

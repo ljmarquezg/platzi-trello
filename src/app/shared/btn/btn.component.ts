@@ -1,6 +1,6 @@
 import { JsonPipe, NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { ColorClass, ColorClassOptions, TextAlign } from '../../models/color.model';
+import { COLORS, Colors, TextAlign } from '../../models/color.model';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
@@ -16,7 +16,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 })
 export class BtnComponent {
   @Input() typeBtn: 'submit' | 'button' | 'reset' = 'button';
-  @Input() color: ColorClassOptions = 'default';
+  @Input() color: Colors = 'default';
   @Input() size?: 'lg' | 'md' |'sm' | 'xs';
   @Input() textAlign: 'left' | 'center' | 'right' = 'center';
   @Input() loading = false;
@@ -31,7 +31,7 @@ export class BtnComponent {
   }
 
   get colors() {
-    return ColorClass[this.color];
+    return COLORS[this.color];
   }
 
   get sizes() {    

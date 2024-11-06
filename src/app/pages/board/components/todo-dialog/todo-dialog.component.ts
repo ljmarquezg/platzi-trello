@@ -4,9 +4,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faClose, faCheckToSlot, faBars, faUser, faTag, faCheckSquare, faClock, faClipboard, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { BtnComponent } from '@shared/btn/btn.component';
 import ToDo from '@models/todo.model';
+import { Card } from '@models/card.model';
 
 interface InputData {
-  todo: ToDo;
+  card: Card;
+  listTitle: string;
 }
 
 interface OutputData {
@@ -26,7 +28,8 @@ export class TodoDialogComponent {
   private dialogRef: DialogRef<OutputData> = inject(DialogRef<OutputData>);
   private data: InputData = inject(DIALOG_DATA);
 
-  todo: ToDo = this.data.todo;
+  card: Card = this.data.card;
+  listTitle: string = this.data.listTitle;
   faClose = faClose;
   faCheckToSlot = faCheckToSlot;
   faBars = faBars;

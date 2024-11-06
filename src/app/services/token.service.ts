@@ -1,49 +1,48 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { getCookie, setCookie, removeCookie } from 'typescript-cookie';
-import {jwtDecode, JwtPayload} from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenService {
   isBrowser: boolean = false;
   token: string = 'token-trello';
   refreshToken: string = 'token-refresh-trello';
 
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object
-  ) {
+  constructor(@Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   saveToken(token: string) {
-    if(!this.isBrowser) return;
-    setCookie(this. token, token, { expires: 365, path: '/' });
+    if (!this.isBrowser) return;
+    setCookie(this.token, token, { expires: 365, path: '/' });
   }
 
   getToken() {
-    if(!this.isBrowser) return '';
+    if (!this.isBrowser) return '';
 
-    const token = getCookie(this. token);
+    const token = getCookie(this.token);
     return token;
   }
 
   removeToken() {
-    if(this.isBrowser){
-      removeCookie(this.  token);
+    if (this.isBrowser) {
+      removeCookie(this.token);
+      this.removeRefreshToken();
     }
   }
 
   isValidToken(): boolean {
     const token = this.getToken();
 
-    if(!token) {
+    if (!token) {
       return false;
     }
 
     const decodedToken = jwtDecode<JwtPayload>(token);
 
-    if(decodedToken && decodedToken?.exp) {
+    if (decodedToken && decodedToken?.exp) {
       const tokenDate = new Date(0);
       tokenDate.setUTCSeconds(decodedToken.exp);
       const today = new Date();
@@ -51,23 +50,23 @@ export class TokenService {
       return tokenDate.getTime() > today.getTime();
     }
 
-    return false
+    return false;
   }
 
   saveRefreshToken(token: string) {
-    if(!this.isBrowser) return;
+    if (!this.isBrowser) return;
     setCookie(this.refreshToken, token, { expires: 365, path: '/' });
   }
 
   getRefreshToken() {
-    if(!this.isBrowser) return '';
+    if (!this.isBrowser) return '';
 
     const token = getCookie(this.refreshToken);
     return token;
   }
 
   removeRefreshToken() {
-    if(this.isBrowser){
+    if (this.isBrowser) {
       removeCookie(this.refreshToken);
     }
   }
@@ -75,13 +74,13 @@ export class TokenService {
   isValidRefreshToken(): boolean {
     const token = this.getRefreshToken();
 
-    if(!token) {
+    if (!token) {
       return false;
     }
 
     const decodedToken = jwtDecode<JwtPayload>(token);
 
-    if(decodedToken && decodedToken?.exp) {
+    if (decodedToken && decodedToken?.exp) {
       const tokenDate = new Date(0);
       tokenDate.setUTCSeconds(decodedToken.exp);
       const today = new Date();
@@ -89,6 +88,6 @@ export class TokenService {
       return tokenDate.getTime() > today.getTime();
     }
 
-    return false
+    return false;
   }
 }
