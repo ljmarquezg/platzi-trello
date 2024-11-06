@@ -1,0 +1,121 @@
+<div class="container mx-auto flex text-gray-600 space-x-8 px-4 pt-8 pb-4">
+    <div class="w-48 divide-y divide-gray-100 space-y-2 text-xs">
+        <ul class="space-y-1">
+            <li>
+                <a 
+                    href="#"
+                    class="block py-2 px-4 text-primary-600 bg-primary-100 hover:bg-primary-100 dark:hover:bg-gray-200 rounded-md"
+                ><fa-icon [icon]="faTrello" class="pr-1"></fa-icon>Boards</a>
+            </li>
+            <li>
+                <a 
+                    href="#"
+                    class="block py-2 px-4  hover:bg-gray-100 dark:hover:bg-gray-200 rounded-md"
+                ><fa-icon [icon]="faBorderTopLeft" class="pr-1"></fa-icon>Templates</a>
+            </li>
+            <li>
+                <a 
+                    href="#"
+                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-200 rounded md"
+                ><fa-icon [icon]="faHomeUser" class="pr-1"></fa-icon>Home</a>
+            </li>
+        </ul>
+        <div class="text-xs">
+            <h3 class="my-3 px-3 font-semibold">Workspaces</h3>
+            <cdk-accordion class="example-accordion">
+                <cdk-accordion-item 
+                    #accordionItem="cdkAccordionItem"
+                    (opened)="singleExpanded(accordionItem.expanded)"
+                    (closed)="singleExpanded(accordionItem.expanded)"
+                >
+                    <button 
+                        class="w-full flex justify-start items-middle py-2 px-2 hover:bg-gray-100 dark:hover:bg-gray-200 rounded-md"
+                        (click)="accordionItem.toggle()"
+                    >
+                        <img 
+                            src="https://i.pravatar.cc/400"
+                            class="rounded-md w-8 h-8 mr-2"
+                        >
+                        <span class="w-full text-left flex justify-between items-center font-semibold">
+                            Luis Marquez's Workspace<fa-icon [icon]="expandIcon()" class="ml-auto"></fa-icon>
+                        </span>
+                    </button>
+                    <ul 
+                        class="ml-2 flex flex-col text-gray-700 space-y-1"
+                        [style.display]="expandDisplay()"
+                    >
+                        <li>
+                            <a class="hover:bg-gray-100 dark:hover:bg-gray-200 rounded-md block py-2 px-3"><fa-icon [icon]="faTrello"></fa-icon> Boards</a>
+                        </li>
+                        <li>
+                            <a class="hover:bg-gray-100 dark:hover:bg-gray-200 rounded-md block py-2 px-3"><fa-icon [icon]="faHeart"></fa-icon> Highlights</a>
+                        </li>
+                        <li>
+                            <a class="hover:bg-gray-100 dark:hover:bg-gray-200 rounded-md block py-2 px-3"><fa-icon [icon]="faBorderAll"></fa-icon> Views</a>
+                        </li>
+                        <li>
+                            <a class="hover:bg-gray-100 dark:hover:bg-gray-200 rounded-md block py-2 px-3"><fa-icon [icon]="faUsers"></fa-icon> Members</a>
+                        </li>
+                        <li>
+                            <a class="hover:bg-gray-100 dark:hover:bg-gray-200 rounded-md block py-2 px-3"><fa-icon [icon]="faGear"></fa-icon> Settings</a>
+                        </li>
+                    </ul>
+                </cdk-accordion-item>
+            </cdk-accordion>
+        </div>
+    </div>
+    <div class="w-9/12 space-y-12">
+        <!--Starred Boards-->
+        <div class="boards">
+            <h2 class="font-semibold mb-2"><fa-icon [icon]="faStar" class="pr-1"></fa-icon>Starred Boards</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <app-board-card label="Board 1" bgColor="primary" [isStarred]="true"/>
+                <app-board-card label="Board 2" bgColor="success" [isStarred]="true"/>
+            </div>
+        </div>
+        <!--Recently Viewed-->
+        <div class="recenty-viewed">
+            <h2 class="font-semibold mb-2"><fa-icon [icon]="faClock" class="pr-1"></fa-icon>Recently Viewed</h2>
+            <div class="grid grid-cols-4 gap-2">
+                <app-board-card label="Board 1" bgColor="primary" [isStarred]="true"/>
+                <app-board-card label="Board 2" bgColor="success" [isStarred]="true"/>
+                <app-board-card label="Board 3" bgColor="default"/>
+                <app-board-card label="Board 4" bgColor="danger"/>
+                <app-board-card label="Create New"/>
+            </div>
+        </div>
+        <!--Your Workspaces-->
+        <div class="workspaces">
+            <h2 class="font-semibold mb-2"><fa-icon [icon]="faClock" class="pr-1"></fa-icon>Your Workspaces</h2>
+            <div class="flex mb-4 justify-between">
+                <div class="mr-3 flex items-center">
+                    <img src="https://i.pravatar.cc/400" alt="workspace" class="w-12 h-12 rounded-md" />
+                    <p class="ml-3 text-md font-semibold text-color-gray-400">Luis Marquez's Workspace</p>
+                </div>
+                <div class="flex space-x-2 self-center">
+                    <app-btn color="default" size="xs" class="flex items-center">
+                        <fa-icon [icon]="faTableColumn" /> Boards
+                    </app-btn>
+                    <app-btn color="default" size="xs" class="flex items-center">
+                        <fa-icon [icon]="faTableColumn" /> Views
+                    </app-btn>
+                    <app-btn color="default" size="xs" class="flex items-center">
+                        <fa-icon [icon]="faUser" /> Members (1)
+                    </app-btn>
+                    <app-btn color="default" size="xs" class="flex items-center">
+                        <fa-icon [icon]="faGear" /> Settings
+                    </app-btn>
+                    <app-btn color="default" size="xs" class="flex items-center">
+                        <fa-icon [icon]="faSuitcase" /> Upgrade
+                    </app-btn>
+                </div>
+            </div>
+            <div class="grid grid-cols-4 gap-2">
+                <app-board-card label="Board 1" bgColor="primary"/>
+                <app-board-card label="Board 2" bgColor="success"/>
+                <app-board-card label="Board 3" bgColor="gray"/>
+                <app-board-card label="Board 4" bgColor="danger"/>
+            </div>
+        </div>
+    </div>
+</div>

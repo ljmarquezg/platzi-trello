@@ -1,0 +1,218 @@
+<div class="w-full grow bg-sky-600 px-4 pb-4">
+    <div class="flex flex-col h-full">
+        <h2 class="text-xl font-bold text-white my-4 grow">Demo Board</h2>
+        <div 
+            class="flex items-start w-full h-full overflow-x-auto" 
+            cdkDropList
+            cdkDropListOrientation="horizontal"
+            [cdkDropListData]="columns()"
+            (cdkDropListDropped)="drop($event)"        
+        >
+            <div class="flex items-start" cdkDropListGroup>
+                @for(column of columns(); track column.title; let index = $index) {
+                    <div class="min-h-3" cdkDrag>
+                        <div class="text-sm min-h-2">
+                            <!-- Column List -->
+                            <app-column>
+                                <div class="flex justify-between py-1">
+                                    <h3 class="text-sm font-bold ml-2 self-center">{{column.title}}</h3>
+                                    <app-btn 
+                                        color="default" 
+                                        class="ml-auto" 
+                                        cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+                                        (click)="openOptions(index)"
+                                    >
+                                        <fa-icon [icon]="faEllipsis" />
+                                    </app-btn>
+                                </div>
+                                <!-- ToDo -->
+                                <div 
+                                    class="text-sm mt-2 min-h-2 mb-2"
+                                    cdkDropList
+                                    [cdkDropListData]="column.todos"
+                                    (cdkDropListDropped)="drop($event)"
+                                >
+                                    @for(todo of column.todos; track todo.id) {
+                                        <div
+                                            cdkDrag
+                                            class="bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400"
+                                            (click)="openDialog(todo)"
+                                        >
+                                            {{todo.title}}
+                                        </div>
+                                    }
+                                </div>
+
+                                @if(column.addNew) {
+                                    <form class="d-flex">
+                                        <input
+                                            type="text"
+                                            [formControl]="todoTitle"
+                                            class="text-sm w-full p-2 rounded border border-gray-300 mb-2 min-h-14"
+                                            placeholder="Enter a title for this card..."
+                                        />
+
+                                        <div class="flex justify-start">
+                                            <app-btn 
+                                                color="primary"
+                                                (click)="createCard(index)"
+                                            >
+                                                Add Card
+                                            </app-btn>
+            
+                                            <app-btn 
+                                                color="default" 
+                                                class="ml-2"
+                                                (click)="toggleNewCardForm(index)"
+                                            >
+                                                <fa-icon [icon]="faTimes" />
+                                            </app-btn>
+                                        </div>
+                                    </form>
+                                } @else {
+                                    <div class="actions flex">
+                                        <app-btn 
+                                            color="default" 
+                                            textAlign="left"
+                                            class="ml-auto grow" 
+                                            (click)="toggleNewCardForm(index)"
+                                        >
+                                            <fa-icon [icon]="faPlus" /> Add new task
+                                        </app-btn>
+        
+                                        <app-btn 
+                                            color="default" 
+                                            textAlign="left"
+                                            class="ml-auto" 
+                                        >
+                                            <fa-icon [icon]="faImages" />
+                                        </app-btn>
+                                    </div>
+                                }
+                            </app-column>
+                            <!-- Options -->
+                            <ng-template
+                                cdkConnectedOverlay
+                                [cdkConnectedOverlayOrigin]="trigger"
+                                [cdkConnectedOverlayOpen]="column.optionsOpen"
+                                >
+                                <div class="z-50 my-4 w-60 text-xs list-none bg-white rounded-xl divide-y divide-gray-100 shadow">
+                                    <div class="py-3 px-4 flex justify-between">
+                                        <span class="block text-xs text-center font-semibold text-gray-400">List Actions</span>
+                                        <button (click)="openOptions(index)" class="block text-gray-900">&times;</button>
+                                    </div>
+                                    <ul class="pb-1 pt-2 py-3">
+                                            <li>
+                                                <a 
+                                                    href="#"
+                                                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                >Add Card</a>
+                                            </li>
+                                            <li>
+                                                <a 
+                                                    href="#"
+                                                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                >Copy List</a>
+                                            </li>
+                                            <li>
+                                                <a 
+                                                    href="#"
+                                                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                >Move List</a>
+                                            </li>
+                                            <li>
+                                                <a 
+                                                    href="#"
+                                                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                >Sort By...</a>
+                                            </li>
+                                            <li>
+                                                <a 
+                                                    href="#"
+                                                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                >Watch</a>
+                                            </li>
+                                    </ul>
+                                
+                                    <cdk-accordion>
+                                        <cdk-accordion-item #accordionItem="cdkAccordionItem">
+                                            <button class="w-full py-4 px-4 hover:bg-gray-100 dark:hover:bg-gray-600" (click)="accordionItem.toggle()">
+                                                <span class="flex justify-between font-semibold">Automation <fa-icon [icon]="faAngleDown"/></span>
+                                            </button>
+                                            <ul [style.display]="accordionItem.expanded ? '' : 'none'">
+                                                <li>
+                                                    <a 
+                                                        href="#"
+                                                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                    >When a card is added to the list…</a>
+                                                </li>
+                                                <li>
+                                                    <a 
+                                                        href="#"
+                                                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                    >Copy List</a>
+                                                </li>
+                                                <li>
+                                                    <a 
+                                                        href="#"
+                                                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                    >Every day, sort list by…</a>
+                                                </li>
+                                                <li>
+                                                    <a 
+                                                        href="#"
+                                                        class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                                    >Create a rule</a>
+                                                </li>
+                                            </ul>
+                                            </cdk-accordion-item>
+                                    </cdk-accordion>
+
+                                    <ul class="py-1">
+                                        <li>
+                                            <a 
+                                                href="#"
+                                                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                            >Archive this list</a>
+                                        </li>
+                                        <li>
+                                            <a 
+                                                href="#"
+                                                class="block py-2 px-4  hover:bg-gray-100 dark:hover:bg-gray-600"
+                                            >Archive all cards in this list</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                }
+
+                @if(isAddingList()) {
+                    <app-column>
+                        <input
+                            type="text"
+                            [formControl]="newListTitle"
+                            class="w-full text-sm p-2 rounded border border-gray-300"
+                            placeholder="Enter a title for this card..."
+                        />
+                        <div class="flex justify-between mt-2">
+                            <app-btn color="primary" (click)="createList()">
+                                Add another list
+                            </app-btn>
+                            <app-btn color="default" (click)="toggleNewListForm()">&times;</app-btn>
+                        </div>
+                    </app-column>
+                } @else {
+                    <app-btn 
+                        color="default" 
+                        class="w-72 flex shrink-0"
+                        (click)="toggleNewListForm()"
+                    >
+                        <fa-icon [icon]="faPlus" />  Add Another List
+                    </app-btn>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<nav class="bg-white text-gray-600 border-gray-200 px-6 shadow-md">
+    <div class="flex flex-wrap justify-between items-center">
+        <div class="flex items-center">
+            <fa-icon [icon]="faBars" class="text-2xl mr-4"></fa-icon>
+            <a routerLink="/">
+                <img 
+                    loading="lazy" 
+                    class="w-20 mr-8" 
+                    src="/assets/images/logo/logo-gradient-neutral-trello.png"
+                    alt="logo" 
+                />
+            </a>
+            <div class="flex items-center">
+                <ul class="flex items-center space-x-8 text-sm font-medium">
+                    <li>
+                        <a class="block py-3 px-4">Workspaces <fa-icon [icon]="faAngleDown"/></a>
+                    </li>
+                    <li>
+                        <a class="block py-3 px-4">Recent <fa-icon [icon]="faAngleDown"/></a>
+                    </li>
+                    <li>
+                        <a class="block py-3 px-4">Starred <fa-icon [icon]="faAngleDown"/></a>
+                    </li>
+                    <li>
+                        <a class="block py-3 px-4">Templates <fa-icon [icon]="faAngleDown"/></a>
+                    </li>
+                    <li>
+                        <app-btn color="primary" type="button">Create</app-btn>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="flex items-center">
+            <div class="space-x-2 flex mr-2">
+                <button>
+                    <fa-icon [icon]="faBell"/>
+                </button>
+                <button>
+                    <fa-icon [icon]="faSearch"/>
+                </button>
+            </div>
+            <app-profile />
+        </div>
+    </div>
+</nav>

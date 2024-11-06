@@ -1,0 +1,15 @@
+<button 
+    [type]="typeBtn" 
+    class="w-full rounded font-size-medium text-sm p-2 min-w-8 min-h-8"
+    [ngClass]="classes"
+    [disabled]="disabled"
+>
+    @if(loading) {
+        <fa-icon
+            class="mr-2"
+            [icon]="faSpinner"
+            animation="spin-pulse"
+        ></fa-icon>
+    }
+    <ng-content></ng-content>
+</button>

@@ -1,0 +1,17 @@
+<div 
+    class="cursor-pointer relative h-24 w-full overflow-hidden rounded-md"
+    [ngClass]="bgColorClass"
+    routerLink="/board"
+>
+    @if(img) {
+        <img src="https://i.pravatar.cc/400" alt="board" class="absolute z-0 w-full h-fit object-cover object-center" />
+    }
+    <h3 class="font-semibold relative p-2">{{label}}</h3>
+    <ng-content></ng-content>
+    <div class="absolute bottom-2 right-2">
+        <fa-icon 
+            [icon]="faStar" 
+            [class]="isStarred ? 'text-yellow-400' : 'text-white'" 
+        />
+    </div>
+</div>
